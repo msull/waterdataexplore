@@ -411,7 +411,8 @@ def fit_polynomial(
     )
 
 
-DATA_PATH = Path(__file__).parent / "waterdata2008.tsv"
+DATA_PATH = Path(__file__).parent / "waterdata.tsv"
+# DATA_PATH = Path(__file__).parent / "waterdata2008.tsv"
 
 
 @st.cache_data
@@ -422,6 +423,7 @@ def load_water_data():
     df["date"] = pd.to_datetime(df["datetime"])
     df["discharge_rate"] = df["148640_00060_00003"].astype(float)
     df["stage_val"] = df["148641_00065_00003"].astype(float)
+    df = df.dropna(subset=["discharge_rate", "stage_val"])
     # Normalize the stage and discharge values
     df["stage_val_norm"] = (df["stage_val"] - df["stage_val"].min()) / (
         df["stage_val"].max() - df["stage_val"].min()
